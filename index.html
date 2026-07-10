@@ -4,11 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Invitation</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #FFDFE5; /* لون بينك فاتح */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.5s;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+        }
+
+        h2 {
+            color: #D14D72;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            height: 50px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        #yesBtn {
+            background-color: #FF5F7E;
+            color: white;
+            z-index: 2;
+        }
+
+        #yesBtn:hover {
+            background-color: #E04D6A;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background-color: #7B828A;
+            color: white;
+            position: absolute;
+            transition: left 0.1s ease, top 0.1s ease;
+            z-index: 2;
+        }
+
+        /* الصفحة الثانية: اختيار التاريخ */
+        .page {
+            display: none;
+            width: 100%;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .date-display {
+            background-color: #FFFFFF;
+            color: #FF5F7E;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #FF5F7E;
+            min-height: 48px;
+        }
+
+        .select-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .select-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            border: 1px solid #FFE5EC;
+            padding: 10px;
+            border-radius: 10px;
+            background: #FFF9FA;
+        }
+
+        .grid-item {
+            background: #FFF;
+            border: 1px solid #FFCAD4;
+            padding: 6px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            text-align: center;
+        }
+
+        .grid-item.selected {
+            background-color: #FFB3C1;
+            border-color: #FF5F7E;
+            font-weight: bold;
+        }
+
+        .grid-item.selected::after {
+            content: '❤️';
+            position: absolute;
+            top: -5px;
+            right: -2px;
+            font-size: 10px;
+        }
+
+        #submitDateBtn {
+            background-color: #D14D72;
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* الصفحة الثالثة والأخيرة */
+        .final-body {
+            background-color: #FFFFFF !important;
+            background-image: linear-gradient(135deg, rgba(128, 0, 32, 0.03) 25%, transparent 25%), 
+                              linear-gradient(225deg, rgba(128, 0, 32, 0.03) 25%, transparent 25%);
+            background-size: 20px 20px;
+        }
+
+        .final-text {
+            color: #FF0000; /* أحمر زاهي */
+            font-size: 26px;
+            font-weight: bold;
+            line-height: 1.5;
+            direction: ltr;
+        }
+    </style>
 </head>
 <body>
 
     <div class="container" id="mainContainer">
+        
         <div id="page1" class="page active" style="position: relative; min-height: 150px;">
             <h2>Will you go out with me on a date?</h2>
             <div class="btn-container" id="firstPageContainer">
@@ -19,11 +187,25 @@
 
         <div id="page2" class="page">
             <div class="date-display" id="finalDateText">اختر تاريخاً مميزاً لنا ✨</div>
+            
             <form id="emailForm" action="https://formspree.io/f/xwvdgnww" method="POST">
                 <input type="hidden" name="Chosen Date" id="hiddenDateInput">
-                <div class="select-group"><label>السنة:</label><div class="grid-container" id="yearsGrid"></div></div>
-                <div class="select-group"><label>الشهر:</label><div class="grid-container" id="monthsGrid"></div></div>
-                <div class="select-group"><label>اليوم:</label><div class="grid-container" id="daysGrid"></div></div>
+                
+                <div class="select-group">
+                    <label>السنة:</label>
+                    <div class="grid-container" id="yearsGrid"></div>
+                </div>
+
+                <div class="select-group">
+                    <label>الشهر:</label>
+                    <div class="grid-container" id="monthsGrid"></div>
+                </div>
+
+                <div class="select-group">
+                    <label>اليوم:</label>
+                    <div class="grid-container" id="daysGrid"></div>
+                </div>
+
                 <button type="submit" id="submitDateBtn">تأكيد الموعد وإرسال 💌</button>
             </form>
         </div>
@@ -31,8 +213,117 @@
         <div id="page3" class="page">
             <p class="final-text">Thank you, my love, I'll be waiting for you😆🫦</p>
         </div>
+
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // --- تحريك زر No بشكل عشوائي وهارب داخل حدود الصفحة الأولى فقط ---
+        const noBtn = document.getElementById('noBtn');
+        const page1 = document.getElementById('page1');
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton); 
+
+        function moveButton() {
+            // حساب المساحة المتاحة للتحرك داخل صندوق الصفحة الأولى الأبيض فقط
+            const padding = 20;
+            const maxX = page1.clientWidth - noBtn.offsetWidth - padding;
+            const maxY = page1.clientHeight - noBtn.offsetHeight - padding;
+            
+            // توليد إحداثيات عشوائية ذكية ومحصورة
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding + 40, Math.floor(Math.random() * maxY)); // أضفنا 40 لتجنب تغطية النص العلوى
+            
+            // نقل الزر ليكون تابعاً لـ page1 لضمان اختفائه تماماً عند الانتقال للصفحة الثانية
+            page1.appendChild(noBtn);
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // --- الانتقال بين الصفحات ---
+        function nextPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + pageNumber).classList.add('active');
+
+            // عند مغادرة الصفحة الأولى، يتم تعطيل وحذف زر No تماماً حتى تنتهي مهمته
+            if(pageNumber === 2 && noBtn) {
+                noBtn.remove();
+            }
+
+            if(pageNumber === 3) {
+                document.body.classList.add('final-body');
+                document.getElementById('mainContainer').style.boxShadow = "none";
+                document.getElementById('mainContainer').style.background = "transparent";
+            }
+        }
+
+        // --- بناء واجهة اختيار التاريخ وضع القلوب ---
+        let selectedDay = '', selectedMonth = '', selectedYear = '';
+
+        const daysGrid = document.getElementById('daysGrid');
+        const monthsGrid = document.getElementById('monthsGrid');
+        const yearsGrid = document.getElementById('yearsGrid');
+
+        for(let i=1; i<=31; i++) {
+            createGridItem(daysGrid, i, 'day');
+        }
+        for(let i=1; i<=12; i++) {
+            createGridItem(monthsGrid, i, 'month');
+        }
+        for(let i=2026; i<=2030; i++) {
+            createGridItem(yearsGrid, i, 'year');
+        }
+
+        function createGridItem(container, value, type) {
+            const item = document.createElement('div');
+            item.classList.add('grid-item');
+            item.innerText = value;
+            item.addEventListener('click', () => {
+                container.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                
+                if(type === 'day') selectedDay = value;
+                if(type === 'month') selectedMonth = value;
+                if(type === 'year') selectedYear = value;
+
+                updateDateDisplay();
+            });
+            container.appendChild(item);
+        }
+
+        function updateDateDisplay() {
+            if(selectedDay && selectedMonth && selectedYear) {
+                const fullDate = `${selectedYear} / ${selectedMonth} / ${selectedDay}`;
+                document.getElementById('finalDateText').innerText = fullDate;
+                document.getElementById('finalDateText').style.color = "#FFFFFF";
+                document.getElementById('finalDateText').style.backgroundColor = "#FF5F7E";
+                document.getElementById('hiddenDateInput').value = fullDate; 
+            }
+        }
+
+        // --- التعامل مع إرسال الإيميل تلقائياً والانتقال للصفحة الأخيرة ---
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            if(!selectedDay || !selectedMonth || !selectedYear) {
+                e.preventDefault();
+                alert('من فضلك اختر التاريخ كاملاً أولاً! ❤️');
+                return;
+            }
+            
+            e.preventDefault(); 
+            
+            const form = this;
+            const data = new FormData(form);
+            
+            fetch(form.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                nextPage(3);
+            }).catch(error => {
+                nextPage(3);
+            });
+        });
+    </script>
 </body>
 </html>
