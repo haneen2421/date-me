@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Invitation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div id="page1" class="page active" style="position: relative; min-height: 150px;">
+            <h2>Will you go out with me on a date?</h2>
+            <div class="btn-container" id="firstPageContainer">
+                <button id="yesBtn" onclick="nextPage(2)">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <div class="date-display" id="finalDateText">اختر تاريخاً مميزاً لنا ✨</div>
+            <form id="emailForm" action="https://formspree.io/f/xwvdgnww" method="POST">
+                <input type="hidden" name="Chosen Date" id="hiddenDateInput">
+                <div class="select-group"><label>السنة:</label><div class="grid-container" id="yearsGrid"></div></div>
+                <div class="select-group"><label>الشهر:</label><div class="grid-container" id="monthsGrid"></div></div>
+                <div class="select-group"><label>اليوم:</label><div class="grid-container" id="daysGrid"></div></div>
+                <button type="submit" id="submitDateBtn">تأكيد الموعد وإرسال 💌</button>
+            </form>
+        </div>
+
+        <div id="page3" class="page">
+            <p class="final-text">Thank you, my love, I'll be waiting for you😆🫦</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
